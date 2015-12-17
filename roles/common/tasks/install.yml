@@ -1,0 +1,119 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+- name: yum update
+  yum: name=* state=latest
+  tags:
+    - mysql51
+    - mysql55
+    - mysql56
+    - php53
+    - php54
+    - php56
+    - postgres92
+    - postgres94
+
+- name: Install libselinux-python 
+  yum: name=libselinux-python state=present
+  tags:
+    - mysql51
+    - mysql55
+    - mysql56
+    - php53
+    - php54
+    - php56
+    - postgres92
+    - postgres94
+
+- name: Install ntp 
+  yum: name=ntp state=present
+  tags:
+    - mysql51
+    - mysql55
+    - mysql56
+    - php53
+    - php54
+    - php56
+    - postgres92
+    - postgres94
+
+- name: Start the ntp service
+  service: name=ntpd state=started enabled=yes
+  tags:
+    - mysql51
+    - mysql55
+    - mysql56
+    - php53
+    - php54
+    - php56
+    - postgres92
+    - postgres94
+
+- name: test to see if selinux is running
+  command: getenforce
+  register: sestatus
+  changed_when: false
+  tags:
+    - mysql51
+    - mysql55
+    - mysql56
+    - php53
+    - php54
+    - php56
+    - postgres92
+    - postgres94
+
+- name: Disable Selinux
+  sudo: yes
+  selinux: state=disabled
+  tags:
+    - mysql51
+    - mysql55
+    - mysql56
+    - php53
+    - php54
+    - php56
+    - postgres92
+    - postgres94
+
+- name: stop iptabes
+  service: name=iptables state=stopped
+  tags:
+    - mysql51
+    - mysql55
+    - mysql56
+    - php53
+    - php54
+    - php56
+    - postgres92
+    - postgres94
+
+- name: Get EPEL Repo
+  yum: name={{item}} state=present
+  with_items:
+    - http://ftp.iij.ad.jp/pub/linux/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
+    - http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+  tags:
+    - mysql51
+    - mysql55
+    - mysql56
+    - php53
+    - php54
+    - php56
+    - postgres92
+    - postgres94
+
+- name: DisabeRepo
+  replace: dest=/etc/yum.repos.d/{{item}} regexp="enabled=1" replace="enabled=0"
+  with_items:
+    - epel.repo
+    - remi.repo
+  tags:
+    - mysql51
+    - mysql55
+    - mysql56
+    - php53
+    - php54
+    - php56
+    - postgres92
+    - postgres94

@@ -1,0 +1,18 @@
+NameVirtualHost *:80
+
+<VirtualHost *:80>
+
+    ServerName {{ host_name }}
+    ServerAdmin root@{{ host_name }}
+    Options  -Indexes
+    DocumentRoot {{  document_root  }}
+
+	<Location />
+		Options -Indexes
+	</Location>
+
+    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" T:%T D:%D I:%I O:%O" {{ host_name }}_log
+    CustomLog /var/log/httpd/{{ host_name }}/access_log {{ host_name }}_log
+    ErrorLog /var/log/httpd/{{ host_name }}/error_log
+
+</virtualHost>

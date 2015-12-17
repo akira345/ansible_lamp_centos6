@@ -1,0 +1,22 @@
+ - name: Get MySQL Community Repo
+   yum: name={{item}} state=present
+   with_items:
+     - http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm
+     - http://dev.mysql.com/get/Downloads/MySQL-5.5/MySQL-shared-compat-5.5.38-1.linux2.6.x86_64.rpm
+     - http://dev.mysql.com/get/Downloads/MySQL-5.5/MySQL-shared-5.5.38-1.linux2.6.x86_64.rpm
+
+ - name: DisabeRepo
+   replace: dest=/etc/yum.repos.d/{{item}} regexp="enabled=1" replace="enabled=0"
+   with_items:
+     - mysql-community.repo
+
+ - name: Install MySQL5.5 Server
+   yum: name={{ item }} state=installed enablerepo=mysql55-community
+   with_items:
+     - mysql
+     - mysql-server
+     - MySQL-python
+   notify:
+     - "start and enable mysql on boot"
+
+ - include: settings.yml
