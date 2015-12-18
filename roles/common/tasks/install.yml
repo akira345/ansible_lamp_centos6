@@ -77,7 +77,7 @@
     - postgres94
 
 - name: stop iptabes
-  service: name=iptables state=stopped
+  service: name=iptables state=stopped enabled=no
   tags:
     - mysql51
     - mysql55

@@ -6,8 +6,6 @@
      - MySQL-python
    notify:
      - "start and enable mysql on boot"
-   when: >
-     ansible_distribution == 'CentOS'
-     and ansible_distribution_version.split('.')[0]|int == 6
+
 
  - include: settings.yml

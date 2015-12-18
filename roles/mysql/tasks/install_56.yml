@@ -19,5 +19,4 @@
    notify:
      - "start and enable mysql on boot"
 
-
  - include: settings.yml
